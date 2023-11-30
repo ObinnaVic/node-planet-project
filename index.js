@@ -4,7 +4,12 @@ const fs = require("fs");
 const habitablePlanets = [];
 
 const getHabitablePlanets = (planets) => {
-    return planets["koi_disposition"] === "CONFIRMED";
+    return (
+      planets["koi_disposition"] === "CONFIRMED" &&
+      planets["koi_insol"] > 0.36 &&
+      planets["koi_insol"] < 1.11 &&
+      planets["koi_prad"] < 1.6
+    );
 }
 
 fs.createReadStream("keplar-data.csv")
@@ -21,5 +26,5 @@ fs.createReadStream("keplar-data.csv")
         console.log(err);
     })
     .on("end", () => {
-        console.log("Done");
+        console.log(`${habitablePlanets.length} planets is the amount of habitable planets found from our data`);
     })
